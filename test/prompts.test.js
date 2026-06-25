@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   buildEmailPrompt,
   buildDocumentPrompt,
+  formatWordLimit,
   hasSensitivePatterns,
   summarizeTextDiff,
 } from '../src/automation.js';
@@ -23,6 +24,11 @@ describe('Oestia Lab automation helpers', () => {
     expect(prompt).toContain('Recommended reply');
     expect(prompt).toContain('Check before sending');
     expect(prompt).toContain('Olá, ainda estamos a avaliar a proposta.');
+  });
+
+  it('formats numeric word limits as Portuguese word-count text', () => {
+    expect(formatWordLimit('150')).toBe('150 palavras');
+    expect(formatWordLimit('')).toBe('Sem limite rígido');
   });
 
   it('builds a document comparison prompt with deterministic diff context', () => {

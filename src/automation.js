@@ -54,6 +54,12 @@ export function countWords(text = '') {
   return text.trim() ? text.trim().split(/\s+/).length : 0;
 }
 
+export function formatWordLimit(value) {
+  const normalized = String(value || '').trim();
+  if (!normalized) return 'Sem limite rígido';
+  return `${normalized} palavras`;
+}
+
 export function buildEmailPrompt({
   language,
   outcome,

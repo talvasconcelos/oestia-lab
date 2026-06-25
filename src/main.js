@@ -1,4 +1,4 @@
-import { buildDocumentPrompt, buildEmailPrompt, hasSensitivePatterns, summarizeTextDiff } from './automation.js';
+import { buildDocumentPrompt, buildEmailPrompt, formatWordLimit, hasSensitivePatterns, summarizeTextDiff } from './automation.js';
 import './styles.css';
 
 const app = document.querySelector('#app');
@@ -67,8 +67,8 @@ app.innerHTML = `
               <option>English</option>
             </select>
           </label>
-          <label>Tamanho máximo
-            <input name="maxLength" value="150 palavras" />
+          <label>Tamanho máximo (palavras)
+            <input name="maxLength" type="number" min="30" max="1000" step="10" value="150" inputmode="numeric" />
           </label>
         </div>
         <label>Contexto adicional
@@ -187,7 +187,11 @@ document.querySelector('#email-form').addEventListener('submit', (event) => {
   const warning = hasSensitivePatterns(values.emailThread)
     ? 'Atenção: o texto parece conter dados sensíveis. Anonimize antes de usar numa ferramenta externa.'
     : '';
-  const prompt = buildEmailPrompt({ ...values, senderContext: 'Profissional ou equipa a responder em contexto de trabalho' });
+  const prompt = buildEmailPrompt({
+    ...values,
+    maxLength: formatWordLimit(values.maxLength),
+    senderContext: 'Profissional ou equipa a responder em contexto de trabalho',
+  });
   renderResult(document.querySelector('#email-result'), prompt, warning);
 });
 
